@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      /* Set a default font and background color for the entire page */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+}
+ 
+/* Style the page title */
+title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #484848;
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+ 
+/* Style the form container */
+form {
+  background-color: #fff;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #c5c5c5;
+  border-radius: 5px;
+  box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.1);
+}
+ 
+/* Style the form header */
+form h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #484848;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #484848;
+}
+/* Style the form labels */
+form label {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #484848;
+}
+ 
+/* Style the form input fields */
+form input[type="text"] {
+  width: 95%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #c5c5c5;
+  border-radius: 5px;
+  font-size: 16px;
+  color: #484848;
+}
+ 
+/* Style the form submit button */
+form input[type="submit"] {
+  display: block;
+  margin: 0 auto;
+  padding: 10px 20px;
+  background-color: #4d90fe;
+  color: #fff;
+  border: none;
+  border-radius: 2px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  text-shadow: 0px -1px 0px rgba(0,0,0,0.2);
+}
+ 
+/* Style the form submit button on hover */
+form input[type="submit"]:hover {
+  background-color: #357ae8;
+}
+    </style>
+    <title>My Form</title>
+  </head>
+  <body>
+    <centre><h1>SafePath</h1></centre>
+    <form method="POST" action="http://bc57-35-245-62-208.ngrok.io/getRiskScores">
+      <label for="start_location">Start Location:</label>
+      <input type="text" id="start_location" name="src"><br><br>
+      <label for="end_location">Destination:</label>
+      <input type="text" id="end_location" name="dst"><br><br>
+      <input type="submit" value="Submit">
+    </form>
+  </body>
+</html>

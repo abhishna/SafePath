@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+  <head>
+
+<style>
+  #map {
+  height: 100%;
+}
+
+/* 
+ * Optional: Makes the sample page fill the window. 
+ */
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#floating-panel {
+  position: absolute;
+  top: 10px;
+  left: 25%;
+  z-index: 5;
+  background-color: #fff;
+  padding: 5px;
+  border: 1px solid #999;
+  text-align: center;
+  font-family: "Roboto", "sans-serif";
+  line-height: 30px;
+  padding-left: 10px;
+}
+
+    /* Set a default font and background color for the entire page */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+}
+ 
+/* Style the page title */
+title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #484848;
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+ 
+/* Style the form container */
+form {
+  background-color: #fff;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #c5c5c5;
+  border-radius: 5px;
+  box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.1);
+}
+ 
+/* Style the form header */
+form h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #484848;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #484848;
+}
+/* Style the form labels */
+form label {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #484848;
+}
+
+p {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #484848;  
+}
+
+/* Style the form input fields */
+form input[type="text"] {
+  width: 95%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #c5c5c5;
+  border-radius: 5px;
+  font-size: 16px;
+  color: #484848;
+}
+ 
+/* Style the form submit button */
+form input[type="submit"] {
+  display: block;
+  margin: 0 auto;
+  padding: 10px 20px;
+  background-color: #4d90fe;
+  color: #fff;
+  border: none;
+  border-radius: 2px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  text-shadow: 0px -1px 0px rgba(0,0,0,0.2);
+}
+
+/* Add a black background color to the top navigation */
+.topnav {
+  background-color: #333;
+  overflow: hidden;
+}
+
+/* Style the links inside the navigation bar */
+.topnav a {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+/* Change the color of links on hover */
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+/* Add a color to the active/current link */
+.topnav a.active {
+  background-color: #04AA6D;
+  color: white;
+}
+ 
+/* Style the form submit button on hover */
+form input[type="submit"]:hover {
+  background-color: #357ae8;
+}
+    </style>
+  <script>
+    
+    const path_list = {{ all_paths | tojson }};
+    function showMap(id){
+
+      const map = new google.maps.Map(document.getElementById("map"));
+      const directionsService = new google.maps.DirectionsService();
+      var segment = path_list[id];
+      console.log(id);
+      console.log(path_list);
+      console.log(segment);
+      for(var k =0; k<segment.length; k++){
+        src = {lat : segment[k].src[0], lng: segment[k].src[1]};
+        dst = {lat : segment[k].dst[0], lng: segment[k].dst[1]};
+        renderDirections(directionsService,map, src, dst, segment[k].mode);
+      }
+    }
+
+    function initMap() {
+      //const directionsService = new google.maps.DirectionsService();
+      if(path_list.length>0){
+        showMap(0)
+      }
+    }
+
+function renderDirections(directionsService,map, src, dest, mode) {
+    const directionsRenderer = new google.maps.DirectionsRenderer();
+    if(mode === 'TRANSIT'){
+      directionsRenderer.setOptions({
+        polylineOptions: {
+        strokeColor: 'red',
+        strokeOpacity: 0.6
+      } 
+      });
+    }
+    else{
+      directionsRenderer.setOptions({
+        polylineOptions: {
+        strokeColor: 'green',
+        strokeOpacity: 0.8
+      } 
+      });
+    }
+    directionsRenderer.setMap(map);
+    calculateAndDisplayRoute(directionsService, directionsRenderer,src,dest,mode);
+}
+
+function calculateAndDisplayRoute(directionsService, directionsRenderer, src, dest, mode) {
+
+  directionsService
+    .route({
+      origin: src,
+      destination: dest,
+      travelMode: mode,
+    })
+    .then((response) => {
+      directionsRenderer.setDirections(response);
+    })
+    .catch((e) => window.alert("Directions request failed due to " + status));
+}
+
+window.initMap = initMap;
+  
+  </script>
+    <title>SafePath</title>
+  </head>
+
+  <body>
+    <div class="topnav">
+      <a class="active" href="#home">Home</a>
+      <a href="#news">News</a>
+      <a href="#contact">Contact</a>
+      <a href="#about">About</a>
+    </div>
+    <centre><h1>SafePath</h1></centre>
+    <form>
+      <label for="start_location">Start Location:</label>
+
+      <input type="text" id="start_location" name="src" ><br><br>
+      <label for="end_location">Destination:</label>
+      <input type="text" id="end_location" name="dst" ><br><br>
+      <input type="button" value="back" onclick="history.back()">
+    </form>
+    <div style="align-self: center;">
+      <p id="route_id" style="text-align: center;"></p>
+    </div>
+  <script>
+      var sc = "{{start}}";
+      var dt = "{{end}}";
+      console.log(sc);
+          console.log(dt);
+      var sc1 = sc.replaceAll("_"," ");
+      var dt1 = dt.replaceAll("_"," ");
+            console.log(sc1);
+      console.log(dt1);
+      var op_list = {{ output | tojson }};
+      //console.log({{output}})
+      //console.log(op_list)
+
+      document.getElementById("start_location").setAttribute("value",sc1);
+      document.getElementById("end_location").setAttribute("value",dt1);
+      for (var i = 0; i < op_list.length; i++) {
+        console.log(i);
+        var item = document.createElement("p");
+        var text = document.createTextNode(op_list[i].replaceAll("_", " "));
+        item.id = i.toString();
+        item.appendChild(text);
+        document.body.appendChild(item);
+        item.onclick = function() {
+
+          console.log(this.id);
+           showMap(this.id)};
+    }
+    </script>
+  <div id="map" style="width:75%";></div>
+<script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBC2T-4TKBFVm8JjIsBXM8OJVz68mbj__w&callback=initMap&v=weekly"
+      defer
+    ></script>
+  </body>
+</html>
